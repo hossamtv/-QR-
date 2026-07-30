@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <!-- استدعاء المكتبة محلياً -->
+    <script src="qr-code-styling.js"></script>
+    
+    <style>
+        :root { --primary: #2563eb; --bg: #f9fafb; --text: #1f2937; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+        body { width: 360px; background: var(--bg); color: var(--text); padding: 20px; }
+        
+        .tabs { display: flex; gap: 5px; background: #fff; padding: 4px; border-radius: 10px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; border: none; background: transparent; padding: 8px; cursor: pointer; border-radius: 6px; font-size: 12px; font-weight: 600; color: #6b7280; transition: 0.2s; }
+        .tab-btn.active { background: var(--primary); color: white; }
+        .tab-btn:hover:not(.active) { background: #f3f4f6; }
+        
+        .tab-content { display: none; animation: fade 0.3s; }
+        .tab-content.active { display: block; }
+        @keyframes fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        label { display: block; font-size: 11px; margin-bottom: 5px; color: #6b7280; font-weight: bold; }
+        input[type="text"] { width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 6px; outline: none; font-size: 13px; }
+        input[type="text"]:focus { border-color: var(--primary); }
+        
+        .options-group { display: flex; gap: 5px; margin-bottom: 12px; }
+        .opt-btn { flex: 1; padding: 6px; border: 1px solid #e5e7eb; background: #fff; border-radius: 6px; cursor: pointer; font-size: 11px; transition: 0.2s; }
+        .opt-btn.selected { border-color: var(--primary); background: #eff6ff; color: var(--primary); font-weight: bold; }
+        .opt-btn:hover:not(.selected) { background: #f9fafb; }
+
+        .color-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        input[type="color"] { width: 35px; height: 28px; border: none; cursor: pointer; border-radius: 4px; }
+
+        .preview { 
+            background: #fff; border-radius: 12px; padding: 20px; text-align: center; 
+            margin: 15px 0; border: 1px dashed #e5e7eb; min-height: 240px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        #qr-container { margin-bottom: 10px; }
+        .hint { font-size: 10px; color: #9ca3af; background: #f3f4f6; padding: 3px 8px; border-radius: 10px; }
+
+        #download-btn { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; transition: 0.2s; }
+        #download-btn:hover { background: #1d4ed8; }
+        #download-btn:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+    <h2>Generate QR code</h2>
+
+    <!-- ✅ تم إضافة معرفات id بدلاً من onclick -->
+    <div class="tabs">
+        <button class="tab-btn active" id="btn-link">Link</button>
+        <button class="tab-btn" id="btn-style">Style</button>
+        <button class="tab-btn" id="btn-color">Color</button>
+    </div>
+
+    <div id="tab-link" class="tab-content active">
+        <label>Enter URL or Text:</label>
+        <input type="text" id="url-input" placeholder="https://example.com">
+    </div>
+
+    <div id="tab-style" class="tab-content">
+        <label>Dots Style:</label>
+        <div class="options-group">
+            <button class="opt-btn selected" data-type="dots" data-val="square">■ Square</button>
+            <button class="opt-btn" data-type="dots" data-val="rounded">● Rounded</button>
+            <button class="opt-btn" data-type="dots" data-val="dots"> Dots</button>
+        </div>
+        <label>Marker Border:</label>
+        <div class="options-group">
+            <button class="opt-btn selected" data-type="cornersSquare" data-val="square">◻ Square</button>
+            <button class="opt-btn" data-type="cornersSquare" data-val="extra-rounded">◯ Circle</button>
+        </div>
+        <label>Marker Center:</label>
+        <div class="options-group">
+            <button class="opt-btn selected" data-type="cornersDot" data-val="square">▪ Sq</button>
+            <button class="opt-btn" data-type="cornersDot" data-val="dot">● Dot</button>
+        </div>
+    </div>
+
+    <div id="tab-color" class="tab-content">
+        <div class="color-row"><label>Dots Color:</label><input type="color" id="dot-color" value="#000000"></div>
+        <div class="color-row"><label>Background:</label><input type="color" id="bg-color" value="#ffffff"></div>
+    </div>
+
+    <div class="preview">
+        <div id="qr-container"></div>
+        <span class="hint">ℹ Scan to test</span>
+    </div>
+
+    <button id="download-btn">Download PNG (1080px)</button>
+
+    <!-- ✅ ربط ملف الجافاسكريبت الخارجي فقط -->
+    <script src="popup.js"></script>
+</body>
+</html>
